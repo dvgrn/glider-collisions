@@ -1,8 +1,9 @@
-# synthesise_patt_v1.2.py
+# synthesise_patt_v1.3.py
 # Changes:
 #   v1.0:  Goldtiger997's original from http://www.conwaylife.com/forums/viewtopic.php?p=68316#p68316
 #   v1.1:  use bz2 module to read directly from compressed files (10x slower than reading from .txt)
 #   v1.2:  decompress archive files if .txt versions of files are not found
+#   v1.3:  Python3 compatibility, just appending .decode() to the bz2 read() lines.
 
 import golly as g
 import bz2
@@ -20,13 +21,13 @@ offset = 0
 if not os.path.isfile("rles.txt"):
   g.show("Decompressing rles.txt.bz2...")
   temp = bz2.BZ2File('rles.txt.bz2', 'rb')
-  data = temp.read()
+  data = temp.read().decode()
   with open ("rles.txt","w") as f: f.write(data)
 
 if not os.path.isfile("colseqs.txt"):
   g.show("Decompressing colseqs.txt.bz2...")
   temp = bz2.BZ2File('colseqs.txt.bz2', 'rb')
-  data = temp.read()
+  data = temp.read().decode()
   with open ("colseqs.txt","w") as f: f.write(data)
   
 patts = open("rles.txt","r")
@@ -41,7 +42,8 @@ for i in range(0,GEN_CHECK):
 g.new("Solutions")
 curr_patt = patts.readline()
 while curr_patt != "":
-        curr_col = cols.readline()
+    curr_col = cols.readline()
+    if curr_col != chr(10): # each line is currently reading as two lines, maybe due to 2-character Windows line endings; this is a cheap workaround
         g.show(str(sols) + " solutions found, " + str(count) + " collisions tried. Press <x> to copy current results to clipboard. Press <esc> to quit.")          
         if popseq in curr_col:
                 g.putcells(g.parse(curr_patt),offset,0)
@@ -52,8 +54,8 @@ while curr_patt != "":
                 g.select(g.getrect())
                 g.copy()
                 g.select([])
-        curr_patt = patts.readline()
         count += 1
+    curr_patt = patts.readline()
 
 patts.close()
 cols.close()
