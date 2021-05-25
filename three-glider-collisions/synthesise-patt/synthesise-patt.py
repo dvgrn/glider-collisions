@@ -1,9 +1,10 @@
-# synthesise_patt_v1.3.py
+# synthesise_patt_v1.4.py
 # Changes:
 #   v1.0:  Goldtiger997's original from http://www.conwaylife.com/forums/viewtopic.php?p=68316#p68316
 #   v1.1:  use bz2 module to read directly from compressed files (10x slower than reading from .txt)
 #   v1.2:  decompress archive files if .txt versions of files are not found
 #   v1.3:  Python3 compatibility, just appending .decode() to the bz2 read() lines.
+#   v1.4:  worked around non-standard \r\r\n newlines in data with newline='\r\n' -- no more doubled counts
 
 import golly as g
 import bz2
@@ -30,8 +31,8 @@ if not os.path.isfile("colseqs.txt"):
   data = temp.read().decode()
   with open ("colseqs.txt","w") as f: f.write(data)
   
-patts = open("rles.txt","r")
-cols = open("colseqs.txt","r")
+patts = open("rles.txt","r", newline="\r\n")
+cols = open("colseqs.txt","r", newline="\r\n")
 
 sols = 0
 count = 0
@@ -43,19 +44,17 @@ g.new("Solutions")
 curr_patt = patts.readline()
 while curr_patt != "":
     curr_col = cols.readline()
-    if curr_col != chr(10): # each line is currently reading as two lines, maybe due to 2-character Windows line endings; this is a cheap workaround
-        g.show(str(sols) + " solutions found, " + str(count) + " collisions tried. Press <x> to copy current results to clipboard. Press <esc> to quit.")          
-        if popseq in curr_col:
-                g.putcells(g.parse(curr_patt),offset,0)
-                offset += 75
-                sols += 1
-        event = g.getevent()
-        if event.startswith("key x"):
-                g.select(g.getrect())
-                g.copy()
-                g.select([])
-        count += 1
+    g.show(str(sols) + " solutions found, " + str(count) + " collisions tried. Press <x> to copy current results to clipboard. Press <esc> to quit.")          
+    if popseq in curr_col:
+        g.putcells(g.parse(curr_patt),offset,0)
+        offset += 75
+        sols += 1
+    event = g.getevent()
+    if event.startswith("key x"):
+        g.select(g.getrect())
+        g.copy()
+        g.select([])
+    count += 1
     curr_patt = patts.readline()
-
 patts.close()
 cols.close()
