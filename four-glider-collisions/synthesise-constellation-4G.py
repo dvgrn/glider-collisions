@@ -122,7 +122,7 @@ def bijoscar(maxsteps):
         return 0
     inithash = g.hash(initrect)
     
-    for i in xrange(maxsteps):
+    for i in range(maxsteps):
         g.run(1)
         if (int(g.getpop()) == initpop): 
             prect = g.getrect()
@@ -170,13 +170,13 @@ def canonise_orientation(length, breadth, ox, oy, a, b, c, d):
     chars = "0123456789abcdefghijklmnopqrstuvwxyz"
     runzeroes = len(chars) + 3
     
-    for v in xrange(int((breadth-1)/5)+1):
+    for v in range(int((breadth-1)/5)+1):
         zeroes = 0
         if (v != 0):
             representation += "z"
-        for u in xrange(length):
+        for u in range(length):
             baudot = 0
-            for w in xrange(5):
+            for w in range(5):
                 x = ox + a*u + b*(5*v + w)
                 y = oy + c*u + d*(5*v + w)
                 baudot = (baudot >> 1) + 16*g.getcell(x, y)

@@ -13,7 +13,7 @@ with open("cols.txt","r") as fl:
 #g.note(str(cols[:20]))
 i = 0
 for i in range(0,len(cols)):
-	cols[i] = cols[i].split(", ")
+    cols[i] = cols[i].split(", ")
 
 def bijoscar(maxsteps):
 
@@ -27,7 +27,7 @@ def bijoscar(maxsteps):
 
         g.run(1)
 
-        if (int(g.getpop()) == initpop): 
+        if (int(g.getpop()) == initpop):
 
             prect = g.getrect()
             phash = g.hash(prect)
@@ -39,7 +39,7 @@ def bijoscar(maxsteps):
                 if (prect == initrect):
                     return period
                 else:
-                    return -period 
+                    return -period
     return -1
 
 
@@ -99,7 +99,7 @@ def canonise_orientation(length, breadth, ox, oy, a, b, c, d):
                     else:
                         representation += "y"
                         representation += chars[zeroes - 4]
-                zeroes = 0     
+                zeroes = 0
                 representation += chars[baudot]
     return representation
 
@@ -127,7 +127,7 @@ if pattern in consts:
     g.show(str(len(cols[loc])) + " collisions found")
     g.setname(pattern)
     for e in cols[loc]:
-	    g.putcells(g.parse(e),offset,0)
-	    offset += 50
+        g.putcells(g.parse(e),offset,0)
+        offset += 50
 else:
     g.note("No 3 glider collision found for that constellation. Better luck next time")
